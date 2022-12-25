@@ -5,43 +5,38 @@ orbs:
 jobs:
 
   terraform-init:
-    working_directory: ~/infrastructure
     executor: terraform/default
     steps:
       - checkout
       - terraform/init:
-          path: .
+          path: ./infrastructure
 
 
   terraform-validate:
-    working_directory: ~/infrastructure
     executor: terraform/default
     steps:
       - checkout
       - terraform/validate:
-          path: .
+          path: ./infrastructure
 
 
   terraform-plan:
-    working_directory: ~/infrastructure
     executor: terraform/default
     steps:
       - checkout
       - terraform/plan:
-          path: .
+          path: ./infrastructure
 
 
   terraform-apply:
-    working_directory: ~/infrastructure
     executor: terraform/default
     steps:
       - checkout
       - terraform/apply:
-          path: .
+          path: ./infrastructure
 
 
   terraform-destroy:
-    working_directory: ~/infrastructure
     executor: terraform/default
     steps:
       - checkout
