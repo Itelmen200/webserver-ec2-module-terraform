@@ -123,7 +123,8 @@ workflows:
         context: 
           - terraform
         requires:
-        - approve-plan
+          - terraform-apply
+        # - approve-plan
         # - approve-test
 
 
