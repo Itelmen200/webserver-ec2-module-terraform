@@ -41,8 +41,8 @@ jobs:
     executor: terraform/default
     steps:
       - checkout
-      - run: terraform init -backend=true -backend-config="bucket=project-terraform-tfstate" -backend-config="key=prod/terraform.tfstate" -force-copy -get=true -input=false
-      - run: terraform destroy -auto-approve
+      - terraform/destroy:
+          path: ./infrastructure
 
 
 
