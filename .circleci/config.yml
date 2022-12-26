@@ -41,14 +41,8 @@ jobs:
     executor: terraform/default
     steps:
       - checkout
-      - run: pwd
-      - run: ls -la
-      - run: 
-          path: /root/project/infrastructure
-          command: terraform init -backend=true -backend-config="bucket=project-terraform-tfstate" -backend-config="key=prod/terraform.tfstate" -force-copy -get=true -input=false
-      - run: 
-          path: /root/project/infrastructure
-          command: terraform destroy -auto-approve
+      - terraform/destroy:
+          path: ./infrastructure
 
 
   terratest:
