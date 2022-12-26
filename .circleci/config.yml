@@ -16,13 +16,15 @@ jobs:
           path: ./infrastructure
       - terraform/apply:
           path: ./infrastructure
+      - run: cd ./infrastructure
+      - run: terraform output
       - terraform/destroy:
           path: ./infrastructure
 
 
   # terratest:
   #   docker:
-  #     - image: cimg/go:1.19.4
+  #     x
   #   steps:
   #     - checkout
 
@@ -50,7 +52,7 @@ jobs:
 workflows:
   deploy_infrastructure:
     jobs:
-    
+
     - terraform
 
 
