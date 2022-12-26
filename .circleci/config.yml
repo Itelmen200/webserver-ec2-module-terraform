@@ -16,7 +16,7 @@ jobs:
           path: ./infrastructure
       - terraform/apply:
           path: ./infrastructure
-      - run: terraform output first_web_server_ssh_key -state=./infrastructure/terraform.tfstate
+      - run: terraform output "first_web_server_ssh_key" -state=./infrastructure/terraform.tfstate
       # - run: terraform output db_subnet_cidr_block -state=./infrastructure/terraform.tfstate
       # - run: terraform output db_ip -state=./infrastructure/terraform.tfstate
       # - run: terraform output first_db_server_id -state=./infrastructure/terraform.tfstate
