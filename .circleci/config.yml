@@ -1,169 +1,52 @@
-version: '2.1'
-orbs:
-  terraform: circleci/terraform@3.2.0
-  tfsec: mycodeself/tfsec@1.0.5
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  scan-example:
-    executor: tfsec/default
+  sectest-iac:
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
-      - tfsec/scan:
-          directory: ./infrastructure
-          exclude-checks: 'aws-ec2-require-vpc-flow-logs-for-all-vpcs,aws-ec2-enable-at-rest-encryption,aws-ec2-enforce-http-token-imds,aws-ec2-no-public-egress-sgr,aws-ec2-no-public-ingress-sgr'
+      - run: |
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+          cd infrastructure
+          tfsec --soft-fail
 
-  terraform-init:
-    executor: terraform/default
-    steps:
-      - checkout
-      - run : pwd
-      - terraform/init:
-          path: ./infrastructure
-
-
-  terraform-validate:
-    executor: terraform/default
-    steps:
-      - checkout
-      - terraform/validate:
-          path: ./infrastructure
-
-
-  terraform-plan:
-    executor: terraform/default
-    steps:
-      - checkout
-      - terraform/plan:
-          path: ./infrastructure
-
-
-  terraform-apply:
-    executor: terraform/default
-    steps:
-      - checkout
-      - terraform/apply:
-          path: ./infrastructure
-
-
-  terraform-destroy:
-    executor: terraform/default
-    steps:
-      - checkout
-      - run: pwd
-      - run: ls -la
-      - run: 
-          path: /root/project/infrastructure
-          command: terraform init -backend=true -backend-config="bucket=project-terraform-tfstate" -backend-config="key=prod/terraform.tfstate" -force-copy -get=true -input=false
-      - run: 
-          path: /root/project/infrastructure
-          command: terraform destroy -auto-approve
-
-
-  terratest:
+  apply-and-test:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       - image: cimg/go:1.19.4
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-
-      - run: wget https://releases.hashicorp.com/terraform/1.3.5/terraform_1.3.5_linux_amd64.zip
-
-      - run: sudo unzip terraform_1.3.5_linux_amd64.zip -d /usr/local/bin
-
-      - run: ls -l /usr/local/bin
-
-      - run: terraform -version
-
-      - run: ls -la 
-
-      - run: go mod init mytests
-      - run: go mod tidy
-
-      - run:
-          name: Run tests
-          command: go test -v 
-  
+      - run: |
+          cd tests
+          go mod init test
+          go mod tidy
+          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update && sudo apt install terraform
+          go test -v -run TestTerraformAwsInfrastructureTest -timeout 30m
+    
 
 
-
-
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  deploy_infrastructure:
+  terraform-ci-cd:
     jobs:
-
-    - scan-example
-
-
-    - terraform-init:
-        context: 
-          - terraform
-        requires:
-        - scan-example
-
-
-    - terraform-validate:
-        context: 
-          - terraform
-        requires:
-        - terraform-init
-
-
-    - terraform-plan:
-        context: 
-          - terraform
-        requires:
-        - terraform-validate
-
-
-    - approve-plan:
-        type: approval
-        requires:
-        - terraform-plan
-
-
-    - terraform-apply:
-        context: 
-          - terraform
-        requires:
-        # - terraform-plan
-        - approve-plan
-
-
-    - terratest:
-        context: 
-          - terraform
-        requires:
-        # - approve-plan
-        - terraform-apply
-
-
-    - approve-test:
-        type: approval
-        requires:
-        # - approve-plan
-        - terratest
-
-
-    - terraform-destroy:
-        context: 
-          - terraform
-        requires:
-        # - approve-plan
-        - approve-test
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# VS Code Extension Version: 1.5.0
+      - sectest-iac
+      - apply-and-test:
+          requires: 
+            - sectest-iac
+      - hold:
+          type: approval
+          requires:
+            - sectest-iac
+            - apply-and-test
+            
