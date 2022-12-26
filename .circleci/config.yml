@@ -30,12 +30,20 @@ jobs:
 
 
   terraform-apply:
-    executor: terraform/default
+    working_directory: ./infrastructure
+    docker:
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
       - checkout
-      - terraform/apply:
-          path: ./infrastructure
-
+      - run:
+          name: terraform init & plan
+          command: |
+            terraform init -input=false
+            terraform plan -out tfapply -var-file terraform.tfvars
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   terraform-destroy:
     executor: terraform/default
