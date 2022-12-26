@@ -16,7 +16,7 @@ jobs:
           path: ./infrastructure
       - terraform/apply:
           path: ./infrastructure
-      - run: terraform output -state=./infrastructure/terraform.tfstate
+      - run: terraform output db_ip2 -state=./infrastructure/terraform.tfstate
       - terraform/destroy:
           path: ./infrastructure
 
