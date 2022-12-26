@@ -16,23 +16,22 @@ jobs:
           path: ./infrastructure
       - terraform/apply:
           path: ./infrastructure
-      - run: terraform output -state=./infrastructure/terraform.tfstate first_web_server_ssh_key
-      # - run: terraform output db_subnet_cidr_block -state=./infrastructure/terraform.tfstate
-      # - run: terraform output db_ip -state=./infrastructure/terraform.tfstate
-      # - run: terraform output first_db_server_id -state=./infrastructure/terraform.tfstate
-      # - run: terraform output first_db_server_public_ip -state=./infrastructure/terraform.tfstate
-      # - run: terraform output first_db_server_ssh_key -state=./infrastructure/terraform.tfstate
-      # - run: terraform output first_web_server_ssh_key -state=./infrastructure/terraform.tfstate
-      # - run: terraform output http_ip -state=./infrastructure/terraform.tfstate
-      # - run: terraform output http_subnet_cidr_block -state=./infrastructure/terraform.tfstate
-      # - run: terraform output second_db_server_id -state=./infrastructure/terraform.tfstate
-      # - run: terraform output second_db_server_public_ip -state=./infrastructure/terraform.tfstate
-      # - run: terraform output second_db_server_ssh_key -state=./infrastructure/terraform.tfstate
-      # - run: terraform output second_web_server_ssh_key -state=./infrastructure/terraform.tfstate
-      # - run: terraform output third_db_server_id -state=./infrastructure/terraform.tfstate
-      # - run: terraform output third_db_server_public_ip -state=./infrastructure/terraform.tfstate
-      # - run: terraform output third_db_server_ssh_key -state=./infrastructure/terraform.tfstate
-      # - run: terraform output vpc_cidr_block -state=./infrastructure/terraform.tfstate
+      - run: terraform output  -state=./infrastructure/terraform.tfstate db_subnet_cidr_block
+      - run: terraform output  -state=./infrastructure/terraform.tfstate db_ip
+      - run: terraform output  -state=./infrastructure/terraform.tfstate first_db_server_id
+      - run: terraform output  -state=./infrastructure/terraform.tfstate first_db_server_public_ip
+      - run: terraform output  -state=./infrastructure/terraform.tfstate first_db_server_ssh_key
+      - run: terraform output  -state=./infrastructure/terraform.tfstate first_web_server_ssh_key
+      - run: terraform output  -state=./infrastructure/terraform.tfstate http_ip
+      - run: terraform output  -state=./infrastructure/terraform.tfstate http_subnet_cidr_block
+      - run: terraform output  -state=./infrastructure/terraform.tfstate second_db_server_id
+      - run: terraform output  -state=./infrastructure/terraform.tfstate second_db_server_public_ip
+      - run: terraform output  -state=./infrastructure/terraform.tfstate second_db_server_ssh_key
+      - run: terraform output  -state=./infrastructure/terraform.tfstate second_web_server_ssh_key
+      - run: terraform output  -state=./infrastructure/terraform.tfstate third_db_server_id
+      - run: terraform output  -state=./infrastructure/terraform.tfstate third_db_server_public_ip
+      - run: terraform output  -state=./infrastructure/terraform.tfstate third_db_server_ssh_key
+      - run: terraform output  -state=./infrastructure/terraform.tfstate vpc_cidr_block
       - terraform/destroy:
           path: ./infrastructure
 
