@@ -3,7 +3,7 @@ orbs:
   terraform: circleci/terraform@3.2.0
   tfsec: mycodeself/tfsec@1.0.5
 jobs:
-    scan-example:
+  scan-example:
     executor: tfsec/default
     steps:
       - checkout
