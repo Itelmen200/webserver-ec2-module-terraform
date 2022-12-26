@@ -16,8 +16,7 @@ jobs:
           path: ./infrastructure
       - terraform/apply:
           path: ./infrastructure
-      - run: cd ./infrastructure
-      - run: terraform output
+      - run: terraform output -state=./infrastructure
       - terraform/destroy:
           path: ./infrastructure
 
