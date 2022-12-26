@@ -27,23 +27,19 @@ jobs:
       - checkout
       - terraform/plan:
           path: ./infrastructure
+      - terraform/apply:
+          path: ./infrastructure
+      - terraform/destroy:
+          path: ./infrastructure
 
 
   terraform-apply:
-    working_directory: ./infrastructure
-    docker:
-      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    executor: terraform/default
     steps:
       - checkout
-      - run:
-          name: terraform init & plan
-          command: |
-            terraform init -input=false
-            terraform plan -out tfapply -var-file terraform.tfvars
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
+      - terraform/apply:
+          path: ./infrastructure
+
 
   terraform-destroy:
     executor: terraform/default
@@ -112,12 +108,12 @@ workflows:
         - terraform-plan
 
 
-    - terraform-apply:
-        context: 
-          - terraform
-        requires:
-        # - terraform-plan
-        - approve-plan
+    # - terraform-apply:
+    #     context: 
+    #       - terraform
+    #     requires:
+    #     # - terraform-plan
+    #     - approve-plan
 
 
     # - terratest:
@@ -128,20 +124,20 @@ workflows:
     #     - terraform-apply
 
 
-    - approve-test:
-        type: approval
-        requires:
-        - terraform-apply
-        # - approve-plan
-        # - terratest
+    # - approve-test:
+    #     type: approval
+    #     requires:
+    #     - terraform-apply
+    #     # - approve-plan
+    #     # - terratest
 
 
-    - terraform-destroy:
-        context: 
-          - terraform
-        requires:
-        # - approve-plan
-        - approve-test
+    # - terraform-destroy:
+    #     context: 
+    #       - terraform
+    #     requires:
+    #     # - approve-plan
+    #     - approve-test
 
 
 
