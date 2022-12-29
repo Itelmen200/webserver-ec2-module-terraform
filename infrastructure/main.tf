@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "project-terraform-tfstate-4531" #ne
+    bucket = "project-terraform-tfstate-4531" #new
     key    = "prod/terraform.tfstate"
     region = "eu-central-1"
   }
