@@ -55,7 +55,7 @@ jobs:
       - run: ls -la
       - run: 
           path: /root/project/infrastructure
-          command: terraform init -backend=true -backend-config="project-terraform-tfstate-4531" -backend-config="key=prod/terraform.tfstate" backend-config="access_key=AKIAZQKIXXY7VO5F3B75" -backend-config="secret_key=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" -force-copy -get=true -input=false
+          command: terraform init -backend=true -backend-config="project-terraform-tfstate-4531" -backend-config="key=prod/terraform.tfstate" -force-copy -get=true -input=false
       - run: 
           path: /root/project/infrastructure
           command: terraform destroy -auto-approve
