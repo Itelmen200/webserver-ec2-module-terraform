@@ -55,7 +55,7 @@ jobs:
       - run: ls -la
       - run: 
           path: /root/project/infrastructure
-          command: terraform init -backend=true -backend-config="ter-buck" -backend-config="key=terprod/terraform.tfstate" -force-copy -get=true -input=false
+          command: terraform init 
       - run: 
           path: /root/project/infrastructure
           command: terraform destroy -auto-approve
