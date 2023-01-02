@@ -59,12 +59,9 @@ jobs:
       - run: 
           path: /root/project/infrastructure
           command: terraform init 
-      - run: 
-          path: /root/project/infrastructure
-          command: terraform workspace select $SECOND_ENVIRONMENT	
-      - run: 
-          path: /root/project/infrastructure
-          command: terraform destroy -auto-approve
+      # - run: 
+      #     path: /root/project/infrastructure
+      #     command: terraform destroy -auto-approve
       - run: 
           path: /root/project/infrastructure
           command: terraform workspace delete $SECOND_ENVIRONMENT	
