@@ -7,6 +7,7 @@ resource "aws_security_group" "administration" {
   vpc_id      = aws_vpc.terraform.id
   tags = {
     Name = "administration"
+    Enviroment = terraform.workspace
   }
 
   # Open ssh port
