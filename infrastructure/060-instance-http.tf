@@ -14,6 +14,7 @@ resource "aws_instance" "http" {
   user_data = file("scripts/first-boot-http.sh")
   tags = {
     Name = each.key
+    Enviroment = terraform.workspace
   }
 }
 
@@ -25,6 +26,7 @@ resource "aws_eip" "public_http" {
   depends_on = [aws_internet_gateway.gw]
   tags = {
     Name = "public-http-${each.key}"
+    Enviroment = terraform.workspace
   }
 }
 

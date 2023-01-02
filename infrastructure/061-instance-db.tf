@@ -14,6 +14,7 @@ resource "aws_instance" "db" {
   user_data = file("scripts/first-boot-db.sh")
   tags = {
     Name = each.key
+    Enviroment = terraform.workspace
   }
 }
 

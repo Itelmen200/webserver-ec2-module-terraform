@@ -16,6 +16,7 @@ resource "aws_subnet" "http" {
   cidr_block = var.network_http["cidr"]
   tags = {
     Name = "subnet-http"
+    Enviroment = terraform.workspace
   }
   depends_on = [aws_internet_gateway.gw]
 }
@@ -26,6 +27,7 @@ resource "aws_subnet" "db" {
   cidr_block = var.network_db["cidr"]
   tags = {
     Name = "subnet-db"
+    Enviroment = terraform.workspace
   }
   depends_on = [aws_internet_gateway.gw]
 }
@@ -35,6 +37,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.terraform.id
   tags = {
     Name = "internet-gateway"
+    Enviroment = terraform.workspace
   }
 }
 
