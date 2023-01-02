@@ -47,7 +47,7 @@ jobs:
       - checkout
       - terraform/apply:
           path: ./infrastructure
-          workspace: $SECOND_WORKSPACE
+          workspace: $SECOND_ENVIRONMENT	
 
 
   terraform-destroy:
@@ -61,13 +61,13 @@ jobs:
           command: terraform init 
       - run: 
           path: /root/project/infrastructure
-          command: terraform workspace select $SECOND_WORKSPACE
+          command: terraform workspace select $SECOND_ENVIRONMENT	
       - run: 
           path: /root/project/infrastructure
           command: terraform destroy -auto-approve
       - run: 
           path: /root/project/infrastructure
-          command: terraform workspace delete $SECOND_WORKSPACE
+          command: terraform workspace delete $SECOND_ENVIRONMENT	
 
 
   terratest:

@@ -6,6 +6,7 @@ resource "aws_vpc" "terraform" {
   enable_dns_hostnames = true
   tags = {
     Name = "vpc-http"
+    Enviroment = terraform.workspace
   }
 }
 
