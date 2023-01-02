@@ -22,7 +22,7 @@ jobs:
       - terraform/init:
           path: ./infrastructure
 
-
+      
   terraform-validate:
     executor: terraform/default
     steps:
@@ -45,6 +45,7 @@ jobs:
       - checkout
       - terraform/apply:
           path: ./infrastructure
+          workspace: $SECOND_ENVIRONMENT	
 
 
   terraform-destroy:
@@ -58,7 +59,16 @@ jobs:
           command: terraform init 
       - run: 
           path: /root/project/infrastructure
+          command: terraform workspace select $SECOND_ENVIRONMENT	
+      - run: 
+          path: /root/project/infrastructure
           command: terraform destroy -auto-approve
+      - run: 
+          path: /root/project/infrastructure
+          command: terraform workspace select default
+      - run: 
+          path: /root/project/infrastructure
+          command: terraform workspace delete $SECOND_ENVIRONMENT	
 
 
   terratest:
@@ -100,6 +110,13 @@ workflows:
           - terraform
         # requires:
         # - scan-example
+
+    # - terraform-workspace:
+    #     context: 
+    #       - terraform
+    #     requires:
+    #     - terraform-init 
+      
 
 
     - terraform-validate:
