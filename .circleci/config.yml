@@ -21,6 +21,7 @@ jobs:
       - run : pwd
       - terraform/init:
           path: ./infrastructure
+          
 
 
   terraform-validate:
@@ -45,6 +46,7 @@ jobs:
       - checkout
       - terraform/apply:
           path: ./infrastructure
+          workspace: $SECOND_WORKSPACE
 
 
   terraform-destroy:
@@ -58,7 +60,13 @@ jobs:
           command: terraform init 
       - run: 
           path: /root/project/infrastructure
+          command: terraform workspace select $SECOND_WORKSPACE
+      - run: 
+          path: /root/project/infrastructure
           command: terraform destroy -auto-approve
+      - run: 
+          path: /root/project/infrastructure
+          command: terraform workspace delete $SECOND_WORKSPACE
 
 
   terratest:
@@ -101,12 +109,19 @@ workflows:
         # requires:
         # - scan-example
 
+    - terraform-workspace:
+        context: 
+          - terraform
+        requires:
+        - terraform-init 
+      
+
 
     - terraform-validate:
         context: 
           - terraform
         requires:
-        - terraform-init
+        - terraform-workspace
 
 
     - terraform-plan:
