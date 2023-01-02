@@ -21,6 +21,7 @@ jobs:
       - run : pwd
       - terraform/init:
           path: ./infrastructure
+
           
 
 
@@ -109,11 +110,11 @@ workflows:
         # requires:
         # - scan-example
 
-    - terraform-workspace:
-        context: 
-          - terraform
-        requires:
-        - terraform-init 
+    # - terraform-workspace:
+    #     context: 
+    #       - terraform
+    #     requires:
+    #     - terraform-init 
       
 
 
@@ -121,7 +122,7 @@ workflows:
         context: 
           - terraform
         requires:
-        - terraform-workspace
+        - terraform-init
 
 
     - terraform-plan:
