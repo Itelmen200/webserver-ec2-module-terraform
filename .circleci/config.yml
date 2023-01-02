@@ -22,7 +22,9 @@ jobs:
       - terraform/init:
           path: ./infrastructure
 
-      
+          
+
+
   terraform-validate:
     executor: terraform/default
     steps:
