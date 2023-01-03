@@ -169,7 +169,7 @@ workflows:
           - terraform
         requires:
         # - approve-plan
-        - approve-test
+        - approve-apply
 
 
 
