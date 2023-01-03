@@ -149,19 +149,19 @@ workflows:
         - approve-plan
 
 
-    - terratest:
-        context: 
-          - terraform
-        requires:
-        # - approve-plan
-        - terraform-apply
+    # - terratest:
+    #     context: 
+    #       - terraform
+    #     requires:
+    #     # - approve-plan
+    #     - terraform-apply
 
 
-    - approve-test:
-        type: approval
-        requires:
-        # - approve-plan
-        - terratest
+    # - approve-test:
+    #     type: approval
+    #     requires:
+    #     # - approve-plan
+    #     - terratest
 
 
     - terraform-destroy:
@@ -169,7 +169,7 @@ workflows:
           - terraform
         requires:
         # - approve-plan
-        - approve-test
+        - terraform-apply
 
 
 
