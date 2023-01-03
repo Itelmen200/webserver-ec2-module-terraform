@@ -157,11 +157,11 @@ workflows:
     #     - terraform-apply
 
 
-    # - approve-test:
-    #     type: approval
-    #     requires:
-    #     # - approve-plan
-    #     - terratest
+    - approve-apply:
+        type: approval
+        requires:
+        # - approve-plan
+        - terraform-apply
 
 
     - terraform-destroy:
@@ -169,7 +169,7 @@ workflows:
           - terraform
         requires:
         # - approve-plan
-        - terraform-apply
+        - approve-apply
 
 
 
